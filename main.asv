@@ -1,0 +1,82 @@
+format longG;
+% read data
+fileFullName = 'C:\Users\tangheng\Dropbox\暑期实习\data\多种指数综合时间序列数据.xlsx';
+[datatemp,T,S] = xlsread(fileFullName);
+dateSeries = T(3:end,1);
+hs300Series = datatemp(:,1);
+zz500Series = datatemp(:,2);
+zz800Series = datatemp(:,3);
+zz1000Series = datatemp(:,4);
+zzltSeries = datatemp(:,5);
+
+%process Series
+series = zz500Series;
+%outcome:change of phase
+[phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+for i = 1:size(phase,1)
+    fprintf('%s\t%d\n',char(dateSeries(phase(i,1))),phase(i,2));
+end
+BB_plot(series,gt,ct,maxlocation,minlocation);
+
+%get result
+series = hs300Series;
+[hs300_phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+
+series = zz500Series;
+[zz500_phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+
+series = zz800Series;
+[zz800_phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+
+series = zz1000Series;
+[zz1000_phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+
+series = zzltSeries;
+[zzlt_phase,maxlocation,minlocation,gt,ct,check] = ...
+    BB_algorithm(dateSeries,series,100000,0.3);
+
+%write dateSeries in sheet1
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',(1:length(dateSeries))',1,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',dateSeries,1,'B1');
+
+%write all three priceSeries in sheet2
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','hs300_phase',2,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300_phase,2,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz500_phase',2,'D1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500_phase,2,'D2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz800_phase',2,'H1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800_phase,2,'H2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz1000_phase',2,'K1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000_phase,2,'K2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zzlt_phase',2,'N1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzlt_phase,2,'N2');
+
+%write all extreme point's date in sheet2
+extremeDateList = sort(unique([hs300Series,zz500Series,zz800Series,zz1000Series,zzltSeries]));
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx', ...
+    extremeDateList,2,'A20');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx', ...
+    extremeDateList,2,'A20');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx', ...
+    dateSeries(extremeDateList),2,'A20');
+
+% all time
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','hs300_phase',2,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300_phase,2,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz500_phase',2,'D1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500_phase,2,'D2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz800_phase',2,'H1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800_phase,2,'H2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zz1000_phase',2,'K1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000_phase,2,'K2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx','zzlt_phase',2,'N1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzlt_phase,2,'N2');
+
+
+
+
