@@ -65,6 +65,7 @@ end
 maxlocation = maxlocation(maxlocation~=0);
 minlocation = minlocation(minlocation~=0);
 
+% STEP III: Elimate redundant point
 [maxlocation,minlocation] = alternate(z,maxlocation,minlocation,mediumPeriod,chg);
 
 
