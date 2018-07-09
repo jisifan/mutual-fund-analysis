@@ -19,7 +19,7 @@ for i = 1:size(phase,1)
 end
 BB_plot(dateSeries,series,gt,ct,maxlocation,minlocation);
 
-%get result
+%% prepare data
 series = hs300Series;
 [hs300_phase,maxlocation,minlocation,hs300_gt,hs300_ct,check] = ...
     BB_algorithm(dateSeries,series,100000,0.3);
@@ -40,22 +40,48 @@ series = zzltSeries;
 [zzlt_phase,maxlocation,minlocation,zzlt_gt,zzlt_ct,check] = ...
     BB_algorithm(dateSeries,series,100000,0.3);
 
-%write dateSeries in sheet1
+
 %% all timeSeries
+%write dateSeries in sheet1
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'index'},1,'A1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',1:length(dateSeries),1,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',(1:length(dateSeries))',1,'A2');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'date'},1,'B1');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',dateSeries,1,'B2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'hs300Series'},1,'C1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300Series,1,'C2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz500Series'},1,'D1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500Series,1,'D2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz800Series'},1,'E1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800Series,1,'E2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz1000Series'},1,'F1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000Series,1,'F2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zzltSeries'},1,'G1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzltSeries,1,'G2');
+
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'hs300Series'},1,'D1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300Series,1,'D2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'hs300_gt'},1,'E1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300_gt,1,'E2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'hs300_ct'},1,'F1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',hs300_ct,1,'F2');
+
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz500Series'},1,'H1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500Series,1,'H2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz500_gt'},1,'I1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500_gt,1,'I2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz500_ct'},1,'J1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz500_ct,1,'J2');
+
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz800Series'},1,'L1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800Series,1,'L2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz800_gt'},1,'M1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800_gt,1,'M2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz800_ct'},1,'N1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz800_ct,1,'N2');
+
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz1000Series'},1,'P1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000Series,1,'P2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz1000_gt'},1,'Q1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000_gt,1,'Q2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz1000_ct'},1,'R1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zz1000_ct,1,'R2');
+
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zzltSeries'},1,'T1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzltSeries,1,'T2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zzlt_gt'},1,'U1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzlt_gt,1,'U2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zzlt_ct'},1,'V1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',zzlt_ct,1,'V2');
 
 
 %% write all three priceSeries in sheet2
