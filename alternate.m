@@ -148,7 +148,7 @@ for i = 1:length(location)-1
     if i>=2 && Lia1(i-1) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1
         if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(maxlocation(Locb1(i-1))))/orig_ser(minlocation(Locb2(i))) < chg ...
                 && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(minlocation(Locb2(i))))/orig_ser(minlocation(Locb2(i))) < chg ...
-                && abs(orig_ser(maxlocation(Locb2(i+1))) - orig_ser(maxlocation(Locb1(i-1))))/min(orig_ser(maxlocation(Locb1(i-1))), orig_ser(maxlocation(Locb2(i+1))))< chg
+                && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(maxlocation(Locb1(i-1))))/min(orig_ser(maxlocation(Locb1(i-1))), orig_ser(maxlocation(Locb1(i+1))))< chg
             minlocation(Locb2(i)) = NaN;
             Lia2(i) = 0;
         end
