@@ -10,13 +10,13 @@ zz1000Series = datatemp(:,4);
 zzltSeries = datatemp(:,5);
 
 %process Series
-series = hs300Series;
+series = zzltSeries;
 %outcome:change of phase
 [phase,maxlocation,minlocation,gt,ct,check] = ...
     BB_algorithm(dateSeries,series,100000,0.3);
-for i = 1:size(phase,1)
-    fprintf('%s\t%d\n',char(dateSeries(phase(i,1))),phase(i,2));
-end
+% for i = 1:size(phase,1)
+%     fprintf('%s\t%d\n',char(dateSeries(phase(i,1))),phase(i,2));
+% end
 BB_plot(dateSeries,series,gt,ct,maxlocation,minlocation);
 
 %% prepare data
@@ -179,6 +179,66 @@ end
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx', ...
     emptyV,2,'G20');
 
+%% write duration in sheet3
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'index'},3,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',(1:length(dateSeries))',3,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'date'},3,'B1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',dateSeries,3,'B2');
+
+bull_bear = hs300_phase(2:end,2) - hs300_phase(1:end-1,2);
+seq = [];
+for i = 1:length(bull_bear)
+    seq = [seq ; linspace(bull_bear(i),bull_bear(i),hs300_phase(i+1,1)-hs300_phase(i,1))'];
+    if i == length(bull_bear)
+        seq = [seq ; bull_bear(i)];
+    end
+end
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'hs300_phase'},3,'C1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',seq,3,'C2');
+
+bull_bear = zz500_phase(2:end,2) - zz500_phase(1:end-1,2);
+seq = [];
+for i = 1:length(bull_bear)
+    seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz500_phase(i+1,1)-zz500_phase(i,1))'];
+    if i == length(bull_bear)
+        seq = [seq ; bull_bear(i)];
+    end
+end
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz500_phase'},3,'D1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',seq,3,'D2');
+
+bull_bear = zz800_phase(2:end,2) - zz800_phase(1:end-1,2);
+seq = [];
+for i = 1:length(bull_bear)
+    seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz800_phase(i+1,1)-zz800_phase(i,1))'];
+    if i == length(bull_bear)
+        seq = [seq ; bull_bear(i)];
+    end
+end
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz800_phase'},3,'E1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',seq,3,'E2');
+
+bull_bear = zz1000_phase(2:end,2) - zz1000_phase(1:end-1,2);
+seq = [];
+for i = 1:length(bull_bear)
+    seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz1000_phase(i+1,1)-zz1000_phase(i,1))'];
+    if i == length(bull_bear)
+        seq = [seq ; bull_bear(i)];
+    end
+end
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zz1000_phase'},3,'F1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',seq,3,'F2');
+
+bull_bear = zzlt_phase(2:end,2) - zzlt_phase(1:end-1,2);
+seq = [];
+for i = 1:length(bull_bear)
+    seq = [seq ; linspace(bull_bear(i),bull_bear(i),zzlt_phase(i+1,1)-zzlt_phase(i,1))'];
+    if i == length(bull_bear)
+        seq = [seq ; bull_bear(i)];
+    end
+end
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',{'zzlt_phase'},3,'G1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx',seq,3,'G2');
 
 
 
