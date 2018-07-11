@@ -37,7 +37,9 @@ gt = z;
 %noise
 ct = x - z;
 
-z = z';
+% z = z';
+% use row data no smooth data(a choice)
+z = x';
 
 %Check Theorem of Conservation of Moments
 order_0 = sum(z')-sum(x);
