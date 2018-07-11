@@ -15,13 +15,13 @@ end
 for i = 1:length(minlocation)
     plot([minlocation(i),minlocation(i)],[0,max(x)+1000],'b');
 end
-xlim([1,3145]);
+
+
 maxX = double((int32(max(x))/int32(1000))*1000+2000);
-xlength = maxX/1000+1;
-maxT = double((int32(length(x))/int32(500))*500);
-tlength = maxT/500;
-a = linspace(500,maxT,tlength);
-b = linspace(0,maxX,xlength);
-set(gca, 'xticklabel' ,dateSeries(a),'yTick',b); 
-text(-90,-1190,dateSeries(1))
+yticks = 0:1000:maxX;
+
+gap = double(int32(length(x))/int32(8));
+xticks = [1:gap:length(x),length(x)];
+set(gca,'xtick',xticks);
+set(gca, 'xticklabel' ,[dateSeries(xticks);'...'],'yTick',yticks); 
 hold off;
