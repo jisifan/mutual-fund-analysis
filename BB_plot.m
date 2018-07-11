@@ -19,6 +19,9 @@ xlim([1,3145]);
 maxX = double((int32(max(x))/int32(1000))*1000+2000);
 xlength = maxX/1000+1;
 maxT = double((int32(length(x))/int32(500))*500);
+if maxT > length(x)
+    maxT = maxT - 500;
+end
 tlength = maxT/500;
 a = linspace(500,maxT,tlength);
 b = linspace(0,maxX,xlength);
