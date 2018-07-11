@@ -6,7 +6,7 @@ function [phase,maxlocation,minlocation,gt,ct,check] = BB_algorithm(dateSeries,x
 
 if nargin == 2
 lamda = 100000;
-chg = 0.3;
+chg = 0.2;
 end
 
 

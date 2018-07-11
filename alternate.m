@@ -140,6 +140,23 @@ minlocation = minlocation(isfinite(minlocation));
 location = sort([maxlocation,minlocation]);
 [Lia1,Locb1] = ismember(location,maxlocation);
 [Lia2,Locb2] = ismember(location,minlocation);
+%elimate three neighboor peek or through
+for i = 1:length(location)-1
+    % if there are three consecutive peaks, then elimate middle one
+    if i>=2 && Lia1(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1
+        maxlocation(Locb1(i)) = NaN;
+    end
+    % if there are three consecutive troughs, then elimate middle one
+    if i>=2 && Lia2(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1
+        minlocation(Locb2(i)) = NaN;
+    end
+end
+
+maxlocation = maxlocation(isfinite(maxlocation));
+minlocation = minlocation(isfinite(minlocation));
+location = sort([maxlocation,minlocation]);
+[Lia1,Locb1] = ismember(location,maxlocation);
+[Lia2,Locb2] = ismember(location,minlocation);
 
 
 for i = 1:length(location)-1
@@ -160,6 +177,42 @@ for i = 1:length(location)-1
         if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(minlocation(Locb2(i-1))))/orig_ser(minlocation(Locb2(i-1))) < chg ...
                 && abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(maxlocation(Locb1(i))))/orig_ser(minlocation(Locb2(i+1))) < chg ...
                 && abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(minlocation(Locb2(i-1))))/min(orig_ser(minlocation(Locb2(i+1))),orig_ser(minlocation(Locb2(i-1)))) < chg
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i)=0;
+        end
+    end
+    
+    %troughs_troughs_peak(first trough is smallest)
+    %if second trough is much bigger then first trough then elimate
+    %second trough
+    if i>=2 && Lia2(i-1) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1 && orig_ser(minlocation(Locb2(i-1)))<orig_ser(minlocation(Locb2(i)))
+        if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(minlocation(Locb2(i-1))))/orig_ser(minlocation(Locb2(i-1))) > chg
+            minlocation(Locb2(i)) = NaN;
+            Lia2(i)=0;
+        end
+    end
+    
+    %peak_troughs_troughs(last trough is smallest)
+    %if second trough is much smaller then first trough then elimate
+    %first trough
+    if i>=2 && Lia1(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1 && orig_ser(minlocation(Locb2(i+1))) < orig_ser(minlocation(Locb2(i)))
+        if abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(minlocation(Locb2(i))))/orig_ser(minlocation(Locb2(i+1))) > chg
+            minlocation(Locb2(i)) = NaN;
+            Lia2(i)=0;
+        end
+    end
+    
+    %trough_peaks_peaks(last trough is biggest)
+    if i>=2 && Lia2(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(i+1)))
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i+1))))/orig_ser(minlocation(Locb1(i))) > chg
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i)=0;
+        end
+    end
+    
+    %peaks_peaks_trough(first trough is biggest)
+    if i>=2 && Lia1(i-1) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(i-1)))
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i-1))))/orig_ser(minlocation(Locb1(i-1))) > chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
