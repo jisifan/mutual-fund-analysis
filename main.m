@@ -1,25 +1,26 @@
 format long g;
 % read data
-startTime = '2010-06-11';
+startTime = '2006-01-05';
 endTime = '2018-07-11';
-indexcode = '000300.SH';
+indexcode = '000902.CSI';%zzlt index 
 fundcode = '000001.OF';
-fundDuration = 360;%how many trade day did we use since fund setup
+%fundDuration = 360;%how many trade day did we use since fund setup
 fundEndDate = endTime;%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
 
 w = windmatlab;
-[w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
-[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
-index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
-timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
-tradedays = w_tdays_data(timess == ones(length(timess),1));
-WindTimeList = w_tdays_times(timess == ones(length(timess),1));
-save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
+% [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
+% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
+% index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
+% timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
+% tradedays = w_tdays_data(timess == ones(length(timess),1));
+% WindTimeList = w_tdays_times(timess == ones(length(timess),1));
+% save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
 load('datatemp.mat');
 
 series = index_fuquan;
 dateSeries = tradedays;
+
 
 %outcome:change of period
 [period,maxlocation,minlocation,gt,ct,check] = ...
@@ -30,6 +31,28 @@ WindSelectedTime = WindTimeList(period(:,1));%select all wind timestamp correspo
 % end
 BB_plot(dateSeries,series,gt,ct,maxlocation,minlocation);
 
+%% start doing with data
+
+fileFullName = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\fundCodeList.xlsx';
+[datatemp,T,S] = xlsread(fileFullName);
+fundCodeList = T(:,1);
+fundNameList = T(:,2);
+
+outputMatrix = [];
+fundDateVector = [];
+
+
+
+
+
+
+
+
+
+
+
+for fundI = 1:length(fundCodeList)
+fundcode = fundCodeList(fundI);
 periodPeerRank = [];%qujian huibao paiming
 dateLocation = [];%suozai ri qi
 peakOrTrough = [];
@@ -42,7 +65,9 @@ fundSetup = w_wss_data;%fund setup date
 WDfundSetupTimeStamp = datenum(fundSetup);%fund setup timestamp
 
 %the end time we analysis, duration means how long since fund setup
-fundEndDate = datestr(WDfundSetupTimeStamp+duration,dateFormat);%************************use duration, or use given end time;
+
+%************************use duration, or use given end time;
+% fundEndDate = datestr(WDfundSetupTimeStamp+duration,dateFormat);
 WDfundEndTimeStamp = datenum(fundEndDate);
 % [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(fundEndDate,fundEndDate);
 % WDfundEndTimeStamp = w_tdays_times;%fund end timestamp(not accurally end,just get data until this moment)s
@@ -65,7 +90,7 @@ for i = 1:(size(period,1)-1)
     
     if WDfundEndTimeStamp >= WindSelectedTime(i+1)
         timeend = strcat('enddate=',strrep(dateSeries(period(i+1,1)),'/','-'));
-        endlocation = find(WindTimeList==WDfundSetupTimeStamp);
+        endlocation = find(WindTimeList==WDfundEndTimeStamp);
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundEndTimeStamp && WDfundEndTimeStamp < WindSelectedTime(i+1)
         timeend = {strcat('enddate=',fundEndDate)};
@@ -88,36 +113,20 @@ for i = 1:(size(period,1)-1)
 end
 
 
-%% write all three priceSeries in sheet1
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',' ','A1:I40');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fundcode'},1,'A1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{fundcode},1,'A2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fundname'},1,'B1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fundname,1,'B2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fund setup date'},1,'C1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fundSetup,1,'C2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'time'},1,'D1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',dateSeries(dateLocation),1,'D2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'bull_bear'},1,'E1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',peakOrTrough(2:end)-peakOrTrough(1:end-1),1,'E2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'duration'},1,'F1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',dateLocation(2:end)-dateLocation(1:end-1),1,'F2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'rank'},1,'G1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',periodPeerRank,1,'G2');
+fprintf('%s\n',char(fundcode));
 
-%get fund managers
-[w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'fund_predfundmanager');
-fundmanagers = w_wss_data{1};
-maLocation = [0,strfind(fundmanagers,')')];
-fumdmanagerList = [];
-
-for i = 1:(length(maLocation)-1)
-    fumdmanagerList = [fumdmanagerList;{strtrim(fundmanagers((maLocation(i)+1):maLocation(i+1)))}];
+T1 = peakOrTrough(2:end)-peakOrTrough(1:end-1);
+T2 = dateLocation(2:end)-dateLocation(1:end-1);
+if is.cell(periodPeerRank)
+    periodPeerRank = cell2mat(periodPeerRank);
 end
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fundmanagers'},1,'I1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fumdmanagerList,1,'I2');
-
-temp_matrix = [peakOrTrough(2:end)-peakOrTrough(1:end-1),dateLocation(2:end)-dateLocation(1:end-1),periodPeerRank];%熊牛市，持续时间，排名
+if is.cell(T1)
+    T1 = cell2mat(T1);
+end
+if is.cell(T2)
+    T1 = cell2mat(T2);
+end
+temp_matrix = [T1,T2,cell2mat(periodPeerRank)];%熊牛市，持续时间，排名
 outcome = [1,0,0,0;0,0,0,0;-1,0,0,0];%熊牛市，总天数，出现几次，平均排名
 bull = [];
 fluction = [];
@@ -139,10 +148,18 @@ outcome(1:3,2:4) = [sum(bull(:,2)),size(bull,1),bullRank;...
     sum(fluction(:,2)),size(fluction,1),fluctionRank;...
     sum(bear(:,2)),size(bear,1),bearRank];
 
+outputMatrix = [outputMatrix;size(bear,1),size(fluction,1),size(bull,1),sum(bear(:,2)),sum(fluction(:,2)),sum(bull(:,2)),bearRank,fluctionRank,bullRank];
+fundDateVector = [fundDateVector;fundSetup];
+end
 
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',{'基金代码','基金名称','成立日期','熊市经历几次','震荡市经历几次','牛市经历几次','熊市经历总天数','震荡市经历总天数','牛市经历总天数','熊市经历平均排名','震荡市经历平均排名','牛市平均排名'},1,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundCodeList,1,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundNameList,1,'B2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundDateVector,1,'C2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',outputMatrix,1,'D2')
 
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'牛熊市（1：牛，0：震荡市，-1：熊）'},2,'A1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'总天数'},2,'B1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'经历几个'},2,'C1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'平均排名'},2,'D1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',outcome,2,'A2');
+% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'牛熊市（1：牛，0：震荡市，-1：熊）'},2,'A1');
+% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'总天数'},2,'B1');
+% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'经历几个'},2,'C1');
+% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'平均排名'},2,'D1');
+% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',outcome,2,'A2');
