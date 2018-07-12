@@ -1,21 +1,21 @@
 format long g;
 % read data
-startTime = '2010-06-11';
+startTime = '2006-01-04';
 endTime = '2018-07-11';
 indexcode = '000300.SH';
-fundcode = '000001.OF';
-fundDuration = 360;%how many trade day did we use since fund setup
+fundcode = '000127.OF';
+%fundDuration = 360;%how many trade day did we use since fund setup
 fundEndDate = endTime;%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
 
 w = windmatlab;
-[w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
-[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
-index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
-timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
-tradedays = w_tdays_data(timess == ones(length(timess),1));
-WindTimeList = w_tdays_times(timess == ones(length(timess),1));
-save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
+% [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
+% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
+% index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
+% timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
+% tradedays = w_tdays_data(timess == ones(length(timess),1));
+% WindTimeList = w_tdays_times(timess == ones(length(timess),1));
+% save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
 load('datatemp.mat');
 
 series = index_fuquan;
@@ -42,7 +42,8 @@ fundSetup = w_wss_data;%fund setup date
 WDfundSetupTimeStamp = datenum(fundSetup);%fund setup timestamp
 
 %the end time we analysis, duration means how long since fund setup
-fundEndDate = datestr(WDfundSetupTimeStamp+duration,dateFormat);%************************use duration, or use given end time;
+%fundEndDate = datestr(WDfundSetupTimeStamp+duration,dateFormat);%************************use duration, or use given end time;
+
 WDfundEndTimeStamp = datenum(fundEndDate);
 % [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(fundEndDate,fundEndDate);
 % WDfundEndTimeStamp = w_tdays_times;%fund end timestamp(not accurally end,just get data until this moment)s
@@ -51,7 +52,7 @@ for i = 1:(size(period,1)-1)
     %fund not setup then continue
     location = 0;
     signal = false;
-    if WDfundSetupTimeStamp > WindSelectedTime(i+1)
+    if WDfundSetupTimeStamp >= WindSelectedTime(i+1)
         continue;
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundSetupTimeStamp && WDfundSetupTimeStamp < WindSelectedTime(i+1)
@@ -65,7 +66,7 @@ for i = 1:(size(period,1)-1)
     
     if WDfundEndTimeStamp >= WindSelectedTime(i+1)
         timeend = strcat('enddate=',strrep(dateSeries(period(i+1,1)),'/','-'));
-        endlocation = find(WindTimeList==WDfundSetupTimeStamp);
+        endlocation = find(WindTimeList==WDfundEndTimeStamp);
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundEndTimeStamp && WDfundEndTimeStamp < WindSelectedTime(i+1)
         timeend = {strcat('enddate=',fundEndDate)};
