@@ -4,8 +4,9 @@ startTime = '2010-06-11';
 endTime = '2018-07-11';
 indexcode = '000300.SH';
 fundcode = '000001.OF';
-fundDuration = 90;%how many trade day did we use since fund setup(not use)
-fundendDate = '2018-05-11';%get fund data until this time
+fundDuration = 360;%how many trade day did we use since fund setup
+fundEndDate = endTime;%get fund data until this time(not use)
+dateFormat = 'yyyy-mm-dd';
 
 w = windmatlab;
 [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
@@ -36,12 +37,15 @@ peakOrTrough = [];
 fundname = w_wsd_data;%fund name
 [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'fund_setupdate');
 
-fundsetup = w_wss_data;%fund setup date
-[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(strrep(fundsetup,'/','-'),strrep(fundsetup,'/','-'));
-WDfundSetupTimeStamp = w_tdays_times;%fund setup timestamp
+fundSetup = w_wss_data;%fund setup date
+% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(strrep(fundSetup,'/','-'),strrep(fundSetup,'/','-'));
+WDfundSetupTimeStamp = datenum(fundSetup);%fund setup timestamp
 
-[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(fundendDate,fundendDate);
-WDfundEndTimeStamp = w_tdays_times;%fund end timestamp(not accurally end,just get data until this moment)s
+%the end time we analysis, duration means how long since fund setup
+fundEndDate = datestr(WDfundSetupTimeStamp+duration,dateFormat);%************************use duration, or use given end time;
+WDfundEndTimeStamp = datenum(fundEndDate);
+% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(fundEndDate,fundEndDate);
+% WDfundEndTimeStamp = w_tdays_times;%fund end timestamp(not accurally end,just get data until this moment)s
 
 for i = 1:(size(period,1)-1)
     %fund not setup then continue
@@ -51,7 +55,7 @@ for i = 1:(size(period,1)-1)
         continue;
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundSetupTimeStamp && WDfundSetupTimeStamp < WindSelectedTime(i+1)
-        timestart = strcat('startdate=',strrep(fundsetup,'/','-'));
+        timestart = strcat('startdate=',strrep(fundSetup,'/','-'));
         startlocation = find(WindTimeList==WDfundSetupTimeStamp);
     %fund just set up then use setup date as startdate
     else 
@@ -64,7 +68,7 @@ for i = 1:(size(period,1)-1)
         endlocation = find(WindTimeList==WDfundSetupTimeStamp);
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundEndTimeStamp && WDfundEndTimeStamp < WindSelectedTime(i+1)
-        timeend = {strcat('enddate=',fundendDate)};
+        timeend = {strcat('enddate=',fundEndDate)};
         endlocation = find(WindTimeList==WDfundEndTimeStamp);
         signal = true;
     %fund just set up then use setup date as startdate
@@ -83,13 +87,15 @@ for i = 1:(size(period,1)-1)
     periodPeerRank = [periodPeerRank;w_wss_data];
 end
 
+
 %% write all three priceSeries in sheet1
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',' ','A1:I40');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fundcode'},1,'A1');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{fundcode},1,'A2');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fundname'},1,'B1');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fundname,1,'B2');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'fund setup date'},1,'C1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fundsetup,1,'C2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',fundSetup,1,'C2');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'time'},1,'D1');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',dateSeries(dateLocation),1,'D2');
 xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'bull_bear'},1,'E1');
