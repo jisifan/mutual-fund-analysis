@@ -1,6 +1,6 @@
 format long g;
 % read data
-startTime = '2006-01-05';
+startTime = '2006-01-04';
 endTime = '2018-07-11';
 indexcode = '000902.CSI';%zzlt index 
 fundcode = '000001.OF';
@@ -76,7 +76,7 @@ for i = 1:(size(period,1)-1)
     %fund not setup then continue
     location = 0;
     signal = false;
-    if WDfundSetupTimeStamp > WindSelectedTime(i+1)
+    if WDfundSetupTimeStamp >= WindSelectedTime(i+1)
         continue;
     %fund just set up then use setup date as startdate
     elseif WindSelectedTime(i) <= WDfundSetupTimeStamp && WDfundSetupTimeStamp < WindSelectedTime(i+1)
@@ -115,18 +115,10 @@ end
 
 fprintf('%s\n',char(fundcode));
 
-T1 = peakOrTrough(2:end)-peakOrTrough(1:end-1);
-T2 = dateLocation(2:end)-dateLocation(1:end-1);
-if is.cell(periodPeerRank)
-    periodPeerRank = cell2mat(periodPeerRank);
-end
-if is.cell(T1)
-    T1 = cell2mat(T1);
-end
-if is.cell(T2)
-    T1 = cell2mat(T2);
-end
-temp_matrix = [T1,T2,cell2mat(periodPeerRank)];%熊牛市，持续时间，排名
+T1 = peakOrTrough(2:end)-peakOrTrough(1:end-1);%牛熊市
+T2 = dateLocation(2:end)-dateLocation(1:end-1);%天数
+
+temp_matrix = [T1,T2,periodPeerRank];%熊牛市，持续时间，排名
 outcome = [1,0,0,0;0,0,0,0;-1,0,0,0];%熊牛市，总天数，出现几次，平均排名
 bull = [];
 fluction = [];
