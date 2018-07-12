@@ -47,6 +47,8 @@ order_1 = matrix_1234'*z' - matrix_1234'*x;
 order_2 = matrix_149'*z' - matrix_149'*x;
 check = [order_0,order_1,order_2];%should be close to zero
 
+z = x';%use row data in stead of smooth data**************** 
+
 %STEP II: Identifying peaks and troughs
 maxlocation = zeros(1,n);
 minlocation = zeros(1,n);

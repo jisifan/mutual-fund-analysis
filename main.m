@@ -22,23 +22,23 @@ BB_plot(dateSeries,series,gt,ct,maxlocation,minlocation);
 %% prepare data
 series = hs300Series;
 [hs300_phase,maxlocation,minlocation,hs300_gt,hs300_ct,check] = ...
-    BB_algorithm(dateSeries,series,100000,0.3);
+    BB_algorithm(dateSeries,series,100000,0.2);
 
 series = zz500Series;
 [zz500_phase,maxlocation,minlocation,zz500_gt,zz500_ct,check] = ...
-    BB_algorithm(dateSeries,series,100000,0.3);
+    BB_algorithm(dateSeries,series,100000,0.2);
 
 series = zz800Series;
 [zz800_phase,maxlocation,minlocation,zz800_gt,zz800_ct,check] = ...
-    BB_algorithm(dateSeries,series,100000,0.3);
+    BB_algorithm(dateSeries,series,100000,0.2);
 
 series = zz1000Series;
 [zz1000_phase,maxlocation,minlocation,zz1000_gt,zz1000_ct,check] = ...
-    BB_algorithm(dateSeries,series,100000,0.3);
+    BB_algorithm(dateSeries,series,100000,0.2);
 
 series = zzltSeries;
 [zzlt_phase,maxlocation,minlocation,zzlt_gt,zzlt_ct,check] = ...
-    BB_algorithm(dateSeries,series,100000,0.3);
+    BB_algorithm(dateSeries,series,100000,0.2);
 
 
 %% all timeSeries
