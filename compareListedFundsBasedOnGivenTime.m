@@ -77,7 +77,6 @@ for fundI = 1:length(fundCodeList)
     
     [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'fund_investtype');
     fundInvestType = w_wss_data;
-    fundInvestType = char(fundInvestType);
     %the end time we analysis, duration means how long since fund setup
     
     %************************use duration, or use given end time;
