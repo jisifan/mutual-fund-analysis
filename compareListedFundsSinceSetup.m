@@ -40,10 +40,11 @@ fundNameList = T(:,2);
 
 outputMatrix = [];
 fundDateVector = [];
+fundInvestTypeVector = [];
 
 
 
-for fundI = 742:length(fundCodeList)
+for fundI = 1:length(fundCodeList)
     fundcode = fundCodeList(fundI);
     periodPeerRank = [];%qujian huibao paiming
     dateLocation = [];%suozai ri qi
@@ -56,6 +57,9 @@ for fundI = 742:length(fundCodeList)
     % [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(strrep(fundSetup,'/','-'),strrep(fundSetup,'/','-'));
     WDfundSetupTimeStamp = datenum(fundSetup);%fund setup timestamp
     
+        
+    [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'fund_investtype');
+    fundInvestType = w_wss_data;
     %the end time we analysis, duration means how long since fund setup
     
     %************************use duration, or use given end time;
@@ -73,7 +77,7 @@ for fundI = 742:length(fundCodeList)
             %fund just set up then use setup date as startdate
         elseif WindSelectedTime(i) <= WDfundSetupTimeStamp && WDfundSetupTimeStamp < WindSelectedTime(i+1)
             timestart = strcat('startdate=',strrep(fundSetup,'/','-'));
-            startlocation = find(WindTimeList==WDfundSetupTimeStamp+2);
+            startlocation = find(WindTimeList==WDfundSetupTimeStamp);
             if size(startlocation,1) == 0
                 j = 1;
                 while size(startlocation,1) == 0
@@ -106,7 +110,7 @@ for fundI = 742:length(fundCodeList)
         else
             break;
         end
-        [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'peer_fund_return_rank_prop_per',timestart,timeend,'fundType=1');
+        [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'peer_fund_return_rank_prop_per',timestart,timeend,'fundType=3');
         dateLocation = [dateLocation;startlocation];
         if signal || i == size(period,1)-1
             dateLocation = [dateLocation;endlocation];
@@ -180,13 +184,15 @@ for fundI = 742:length(fundCodeList)
     
     outputMatrix = [outputMatrix;Nbear,Nfluction,Nbull,daysbear,daysfluction,daysbull,bearRank,fluctionRank,bullRank];
     fundDateVector = [fundDateVector;fundSetup];
+    fundInvestTypeVector = [fundInvestTypeVector;fundInvestType];
 end
 
-% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',{'基金代码','基金名称','成立日期','熊市经历几次','震荡市经历几次','牛市经历几次','熊市经历总天数','震荡市经历总天数','牛市经历总天数','熊市经历平均排名','震荡市经历平均排名','牛市平均排名'},1,'A1');
-% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundCodeList,1,'A2');
-% xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundNameList,1,'B2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundDateVector,1,'C743');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',outputMatrix,1,'D743')
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',{'基金代码','基金名称','基金投资类型','成立日期','熊市经历几次','震荡市经历几次','牛市经历几次','熊市经历总天数','震荡市经历总天数','牛市经历总天数','熊市经历平均排名','震荡市经历平均排名','牛市平均排名'},1,'A1');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundCodeList,1,'A2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundNameList,1,'B2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundInvestTypeVector,1,'C2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundDateVector,1,'D2');
+xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',outputMatrix,1,'E2');
 
 % xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'牛熊市（1：牛，0：震荡市，-1：熊）'},2,'A1');
 % xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'总天数'},2,'B1');

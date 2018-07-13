@@ -90,7 +90,7 @@ for i = 1:(size(period,1)-1)
     else
         break;
     end
-    [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'peer_fund_return_rank_prop_per',timestart,timeend,'fundType=1');
+    [w_wss_data,w_wss_codes,w_wss_fields,w_wss_times,w_wss_errorid,w_wss_reqid]=w.wss(fundcode,'peer_fund_return_rank_prop_per',timestart,timeend,'fundType=3');
     dateLocation = [dateLocation;startlocation];
     if signal || i == size(period,1)-1
         dateLocation = [dateLocation;endlocation];
