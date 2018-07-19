@@ -86,8 +86,7 @@ maxlocation = maxlocation';
 minlocation = minlocation';
 check = check';
 
-%Check for cycles less than 15 months and phases less than 5 months(do not
-%return)
+%Check for cycles and phases (do not return)
 for i = 1:length(maxlocation)-1
     temp(i) = maxlocation(i+1) - maxlocation(i);
 end

@@ -24,11 +24,11 @@ for i = 1:length(location)-1
     % if two extreme points are too close, then compare with their
     % neighboor points.if the difference is bigger than chg, then accept
     % that point
-    if location(i+1) - location(i) < duration  && Lia1(i) + Lia1(i+1) + Lia2(i) + Lia2(i+1) > 1
+    if location(i+1) - location(i) < duration  && Lia1(i) + Lia1(i+1) + Lia2(i) + Lia2(i+1) > 1 && i>1
         % if i is not the first point and not the last point,then compare with previous one
         j = i - 1;
-        while j>0
-            if i + j >2
+        while j>1
+            if Lia1(i) + Lia1(j) + Lia2(i) + Lia2(j) >1
                 break;
             end
             j = j - 1;
@@ -69,71 +69,6 @@ for i = 1:length(location)-1
         end
     end
 end
-
-%if two extreme points are too close, decide whether it's reasonable
-%if we elimate that point(not use now)
-
-%     if location(i+1) - location(i) < duration  && Lia1(i) + Lia1(i+1) + Lia2(i) + Lia2(i+1) > 1
-%         % if i is not the first point and not the last point,then compare with previous one
-%         j = i - 1;
-%         while j>0
-%             if i + j >2
-%                 break;
-%             end
-%             j = j - 1;
-%         end
-%         previousLia1 = Lia1(j);
-%         previousval = orig_ser(location(j));
-%         if i>1 && i+1<length(location)
-%             Reasonable_i = 0;
-%             Reasonable_iplus1 = 0;
-%             Reasonable_all = true;
-%             %check i's score
-%             if (previousLia1 == Lia1(i) && (abs(orig_ser(location(i)) - previousval)/previousval > chg || abs(orig_ser(location(i)) - previousval)/orig_ser(location(i))>chg)) ...
-%                     ||(previousLia1 ~= Lia1(i) && (abs(orig_ser(location(i)) - previousval)/previousval < chg && abs(orig_ser(location(i)) - previousval)/orig_ser(location(i))<chg))
-%                 Reasonable_i =  Reasonable_i+1;
-%             end
-%             if(Lia1(i+2) == Lia1(i) && (abs(orig_ser(location(i)) - orig_ser(location(i+2)))/orig_ser(location(i+2)) > chg || abs(orig_ser(location(i)) - orig_ser(location(i+2)))/orig_ser(location(i))>chg)) ...
-%                     ||(Lia1(i+2) ~= Lia1(i) && (abs(orig_ser(location(i)) - orig_ser(location(i+2)))/orig_ser(location(i+2)) < chg && abs(orig_ser(location(i)) - orig_ser(location(i+2)))/orig_ser(location(i))<chg))
-%                 Reasonable_i =  Reasonable_i+1;
-%             end
-%             %check  i+1's score
-%             if (previousLia1 == Lia1(i+1) && (abs(orig_ser(location(i+1)) - previousval)/previousval > chg || abs(orig_ser(location(i+1)) - previousval)/orig_ser(location(i+1))>chg)) ...
-%                     ||(previousLia1 ~= Lia1(i+1) && (abs(orig_ser(location(i+1)) - previousval)/previousval < chg && abs(orig_ser(location(i+1)) -previousval)/orig_ser(location(i+1))<chg))
-%                 Reasonable_iplus1 =  Reasonable_iplus1+1;
-%             end
-%             if(Lia1(i+2) == Lia1(i+1) && (abs(orig_ser(location(i+1)) - orig_ser(location(i+2)))/orig_ser(location(i+2)) > chg || abs(orig_ser(location(i+1)) - orig_ser(location(i+2)))/orig_ser(location(i+1))>chg)) ...
-%                     ||(Lia1(i+2) ~= Lia1(i+1) && (abs(orig_ser(location(i+1)) - orig_ser(location(i+2)))/orig_ser(location(i+2)) < chg && abs(orig_ser(location(i+1)) - orig_ser(location(i+2)))/orig_ser(location(i+1))<chg))
-%                 Reasonable_iplus1 =  Reasonable_iplus1+1;
-%             end
-%             %check whether it's reasonable if we remove both i and i+1
-%             if (previousLia1 == Lia1(i+2) && (abs(orig_ser(location(i+2)) - previousval)/previousval > chg || abs(orig_ser(location(i+2)) - previousval)/orig_ser(location(i+2))>chg)) ...
-%                     ||(previousLia1 ~= Lia1(i+2) && (abs(orig_ser(location(i+2)) - previousval)/previousval < chg && abs(orig_ser(location(i+2)) - previousval)/orig_ser(location(i+2))<chg))
-%                 Reasonable_all = false;
-%             end
-% 
-%             %if i is better than i+1,elimate i+1
-%             if Reasonable_i+1 > 0
-%                 if Lia1(i+1)>0
-%                     maxlocation(Locb1(i+1)) = NaN;
-%                     Lia1(i+1) = 0;
-%                 else
-%                     minlocation(Locb2(i+1)) = NaN;
-%                     Lia2(i+1) = 0;
-%                 end
-%             end
-%             if Reasonable_i>0
-%                 if Lia1(i)>0
-%                     maxlocation(Locb1(i)) = NaN;
-%                     Lia1(i) = 0;
-%                 else
-%                     minlocation(Locb2(i)) = NaN;
-%                     Lia2(i) = 0;
-%                 end
-%             end
-%         end
-%     end
-% end
 
 maxlocation = maxlocation(isfinite(maxlocation));
 minlocation = minlocation(isfinite(minlocation));

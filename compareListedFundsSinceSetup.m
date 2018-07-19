@@ -7,6 +7,7 @@ fundcode = '000001.OF';
 %fundDuration = 360;%how many trade day did we use since fund setup
 fundEndDate = endTime;%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
+outputFile = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx';
 
 w = windmatlab;
 % [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
@@ -105,6 +106,13 @@ for fundI = 1:length(fundCodeList)
         elseif WindSelectedTime(i) <= WDfundEndTimeStamp && WDfundEndTimeStamp < WindSelectedTime(i+1)
             timeend = {strcat('enddate=',fundEndDate)};
             endlocation = find(WindTimeList==WDfundEndTimeStamp);
+            if size(endlocation,1) == 0
+                j = 1;
+                while size(endlocation,1) == 0
+                    endlocation = find(WindTimeList==WDfundEndTimeStamp-j);
+                    j = j+1;
+                end
+            end
             signal = true;
             %fund just set up then use setup date as startdate
         else
@@ -187,12 +195,12 @@ for fundI = 1:length(fundCodeList)
     fundInvestTypeVector = [fundInvestTypeVector;fundInvestType];
 end
 
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',{'基金代码','基金名称','基金投资类型','成立日期','熊市经历几次','震荡市经历几次','牛市经历几次','熊市经历总天数','震荡市经历总天数','牛市经历总天数','熊市经历平均排名','震荡市经历平均排名','牛市平均排名'},1,'A1');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundCodeList,1,'A2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundNameList,1,'B2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundInvestTypeVector,1,'C2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',fundDateVector,1,'D2');
-xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx',outputMatrix,1,'E2');
+xlswrite(outputFile,{'基金代码','基金名称','基金投资类型','成立日期','熊市经历几次','震荡市经历几次','牛市经历几次','熊市经历总天数','震荡市经历总天数','牛市经历总天数','熊市经历平均排名','震荡市经历平均排名','牛市平均排名'},1,'A1');
+xlswrite(outputFile,fundCodeList,1,'A2');
+xlswrite(outputFile,fundNameList,1,'B2');
+xlswrite(outputFile,fundInvestTypeVector,1,'C2');
+xlswrite(outputFile,fundDateVector,1,'D2');
+xlswrite(outputFile,outputMatrix,1,'E2');
 
 % xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'牛熊市（1：牛，0：震荡市，-1：熊）'},2,'A1');
 % xlswrite('C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result2.xlsx',{'总天数'},2,'B1');
