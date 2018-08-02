@@ -3,12 +3,12 @@ format long g;
 startTime = '2006-01-04';
 endTime = '2018-07-11';
 indexcode = '000902.CSI';
-fundcode = '001898.OF';
-fundStartDate = '2017-9-27';
+fundcode = '910021.OF';
+fundStartDate = '1917-9-27';
 %fundDuration = 360;%how many trade day did we use since fund setup
 fundEndDate = endTime;%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
-fileName = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\singleFundStyle.xlsx';
+fileName = 'C:\Users\tangheng\Dropbox\summerIntern\代码\mutual-fund-analysis\singleFundStyle.xlsx';
 
 w = windmatlab;
 % [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
