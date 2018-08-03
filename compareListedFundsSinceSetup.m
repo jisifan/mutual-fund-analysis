@@ -1,22 +1,22 @@
 format long g;
 % read data
 startTime = '2006-01-04';
-endTime = '2018-07-11';
+endTime = '2018-07-24';
 indexcode = '000902.CSI';%zzlt index
 fundcode = '000001.OF';
 %fundDuration = 360;%how many trade day did we use since fund setup
 fundEndDate = endTime;%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
-outputFile = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\allFundCompare.xlsx';
+outputFile = 'C:\Users\tangheng\Dropbox\summerIntern\代码\mutual-fund-analysis\compareBaseOntime.xlsx';
 
 w = windmatlab;
-% [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
-% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
-% index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
-% timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
-% tradedays = w_tdays_data(timess == ones(length(timess),1));
-% WindTimeList = w_tdays_times(timess == ones(length(timess),1));
-% save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
+[w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
+[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
+index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
+timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
+tradedays = w_tdays_data(timess == ones(length(timess),1));
+WindTimeList = w_tdays_times(timess == ones(length(timess),1));
+save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
 load('datatemp.mat');
 
 series = index_fuquan;
@@ -34,7 +34,7 @@ BB_plot(dateSeries,series,gt,ct,maxlocation,minlocation);
 
 %% start doing with data
 
-fileFullName = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\fundCodeList.xlsx';
+fileFullName = 'C:\Users\tangheng\Dropbox\summerIntern\代码\mutual-fund-analysis\fundCodeList-ultimate.xlsx';
 [datatemp,T,S] = xlsread(fileFullName);
 fundCodeList = T(:,1);
 fundNameList = T(:,2);
@@ -123,9 +123,9 @@ for fundI = 1:length(fundCodeList)
         if signal || i == size(period,1)-1
             dateLocation = [dateLocation;endlocation];
         end
-        peakOrTrough =[peakOrTrough;period(i,2)];
+        peakOrTrough =[peakOrTrough;period(i,3)];
         if signal || i == size(period,1)-1
-            peakOrTrough =[peakOrTrough;period(i+1,2)];
+            peakOrTrough =[peakOrTrough;period(i+1,3)];
         end
         periodPeerRank = [periodPeerRank;w_wss_data];
     end
@@ -133,8 +133,8 @@ for fundI = 1:length(fundCodeList)
     
     fprintf('%s\n',char(fundcode));
     
-    T1 = peakOrTrough(2:end)-peakOrTrough(1:end-1);%牛熊市
-    T2 = dateLocation(2:end)-dateLocation(1:end-1);%天数
+    T1 = peakOrTrough(1:(end-1));%牛熊市
+    T2 = datenum(dateSeries(dateLocation(2:end)))- datenum(dateSeries(dateLocation(1:end-1)));%天数
     
     if iscell(periodPeerRank)
         periodPeerRank = cell2mat(periodPeerRank);

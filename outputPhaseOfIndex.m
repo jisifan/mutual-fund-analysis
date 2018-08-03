@@ -1,6 +1,6 @@
 format longG;
 % read data
-fileFullName = 'C:\Users\tangheng\Dropbox\暑期实习\data\多种指数综合时间序列数据.xlsx';
+fileFullName = 'C:\Users\tangheng\Dropbox\summerIntern\data\多种指数综合时间序列数据.xlsx';
 [datatemp,T,S] = xlsread(fileFullName);
 dateSeries = T(3:end,1);
 hs300Series = datatemp(:,1);
@@ -8,7 +8,7 @@ zz500Series = datatemp(:,2);
 zz800Series = datatemp(:,3);
 zz1000Series = datatemp(:,4);
 zzltSeries = datatemp(:,5);
-outputFile = 'C:\Users\tangheng\Dropbox\暑期实习\代码\mutual-fund-analysis\result.xlsx';
+outputFile = 'C:\Users\tangheng\Dropbox\summerIntern\代码\mutual-fund-analysis\result.xlsx';
 
 %process Series
 series = zzltSeries;
@@ -98,87 +98,87 @@ xlswrite(outputFile,{'zzlt_phase'},2,'N1');
 xlswrite(outputFile,zzlt_phase,2,'N2');
 
 %% write all extreme point's date in sheet2
-extremeIndexList = sort(unique([hs300_phase(:,1);zz500_phase(:,1);zz800_phase(:,1);zz1000_phase(:,1);zzlt_phase(:,1)]));
-extremeDateList = dateSeries(extremeIndexList);
-xlswrite(outputFile, ...
-    {'index'},2,'A29');
-xlswrite(outputFile, ...
-    {'date'},2,'B29');
-xlswrite(outputFile, ...
-    extremeIndexList,2,'A30');
-xlswrite(outputFile, ...
-    extremeDateList,2,'B30');
+% extremeIndexList = sort(unique([hs300_phase(:,1);zz500_phase(:,1);zz800_phase(:,1);zz1000_phase(:,1);zzlt_phase(:,1)]));
+% extremeDateList = dateSeries(extremeIndexList);
+% xlswrite(outputFile, ...
+%     {'index'},2,'A29');
+% xlswrite(outputFile, ...
+%     {'date'},2,'B29');
+% xlswrite(outputFile, ...
+%     extremeIndexList,2,'A30');
+% xlswrite(outputFile, ...
+%     extremeDateList,2,'B30');
 
 %% write all extreme value in one matrix
-phase = hs300_phase;
-xlswrite(outputFile, ...
-    {'hs300_phase'},2,'C29');
-[Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
-emptyV = zeros(length(extremeIndexList),1);
-emptyV = emptyV - 1;
-for i = 1:length(extremeIndexList)
-    if Lia1(i) ~= 0
-        emptyV(i) = phase(Locb1(i),2);
-    end
-end
-xlswrite(outputFile, ...
-    emptyV,2,'C30');
-
-phase = zz500_phase;
-xlswrite(outputFile, ...
-    {'zz500_phase'},2,'D29');
-[Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
-emptyV = zeros(length(extremeIndexList),1);
-emptyV = emptyV - 1;
-for i = 1:length(extremeIndexList)
-    if Lia1(i) ~= 0
-        emptyV(i) = phase(Locb1(i),2);
-    end
-end
-xlswrite(outputFile, ...
-    emptyV,2,'D30');
-
-phase = zz800_phase;
-xlswrite(outputFile, ...
-    {'zz800_phase'},2,'E29');
-[Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
-emptyV = zeros(length(extremeIndexList),1);
-emptyV = emptyV - 1;
-for i = 1:length(extremeIndexList)
-    if Lia1(i) ~= 0
-        emptyV(i) = phase(Locb1(i),2);
-    end
-end
-xlswrite(outputFile, ...
-    emptyV,2,'E30');
-
-phase = zz1000_phase;
-xlswrite(outputFile, ...
-    {'zz1000_phase'},2,'F29');
-[Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
-emptyV = zeros(length(extremeIndexList),1);
-emptyV = emptyV - 1;
-for i = 1:length(extremeIndexList)
-    if Lia1(i) ~= 0
-        emptyV(i) = phase(Locb1(i),2);
-    end
-end
-xlswrite(outputFile, ...
-    emptyV,2,'F30');
-
-phase = zzlt_phase;
-xlswrite(outputFile, ...
-    {'zzlt_phase'},2,'G29');
-[Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
-emptyV = zeros(length(extremeIndexList),1);
-emptyV = emptyV - 1;
-for i = 1:length(extremeIndexList)
-    if Lia1(i) ~= 0
-        emptyV(i) = phase(Locb1(i),2);
-    end
-end
-xlswrite(outputFile, ...
-    emptyV,2,'G30');
+% phase = hs300_phase;
+% xlswrite(outputFile, ...
+%     {'hs300_phase'},2,'C29');
+% [Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
+% emptyV = zeros(length(extremeIndexList),1);
+% emptyV = emptyV - 1;
+% for i = 1:length(extremeIndexList)
+%     if Lia1(i) ~= 0
+%         emptyV(i) = phase(Locb1(i),2);
+%     end
+% end
+% xlswrite(outputFile, ...
+%     emptyV,2,'C30');
+% 
+% phase = zz500_phase;
+% xlswrite(outputFile, ...
+%     {'zz500_phase'},2,'D29');
+% [Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
+% emptyV = zeros(length(extremeIndexList),1);
+% emptyV = emptyV - 1;
+% for i = 1:length(extremeIndexList)
+%     if Lia1(i) ~= 0
+%         emptyV(i) = phase(Locb1(i),2);
+%     end
+% end
+% xlswrite(outputFile, ...
+%     emptyV,2,'D30');
+% 
+% phase = zz800_phase;
+% xlswrite(outputFile, ...
+%     {'zz800_phase'},2,'E29');
+% [Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
+% emptyV = zeros(length(extremeIndexList),1);
+% emptyV = emptyV - 1;
+% for i = 1:length(extremeIndexList)
+%     if Lia1(i) ~= 0
+%         emptyV(i) = phase(Locb1(i),2);
+%     end
+% end
+% xlswrite(outputFile, ...
+%     emptyV,2,'E30');
+% 
+% phase = zz1000_phase;
+% xlswrite(outputFile, ...
+%     {'zz1000_phase'},2,'F29');
+% [Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
+% emptyV = zeros(length(extremeIndexList),1);
+% emptyV = emptyV - 1;
+% for i = 1:length(extremeIndexList)
+%     if Lia1(i) ~= 0
+%         emptyV(i) = phase(Locb1(i),2);
+%     end
+% end
+% xlswrite(outputFile, ...
+%     emptyV,2,'F30');
+% 
+% phase = zzlt_phase;
+% xlswrite(outputFile, ...
+%     {'zzlt_phase'},2,'G29');
+% [Lia1,Locb1] = ismember(extremeIndexList,phase(:,1));
+% emptyV = zeros(length(extremeIndexList),1);
+% emptyV = emptyV - 1;
+% for i = 1:length(extremeIndexList)
+%     if Lia1(i) ~= 0
+%         emptyV(i) = phase(Locb1(i),2);
+%     end
+% end
+% xlswrite(outputFile, ...
+%     emptyV,2,'G30');
 
 %% write duration in sheet3
 xlswrite(outputFile,{'index'},3,'A1');
@@ -186,7 +186,7 @@ xlswrite(outputFile,(1:length(dateSeries))',3,'A2');
 xlswrite(outputFile,{'date'},3,'B1');
 xlswrite(outputFile,dateSeries,3,'B2');
 
-bull_bear = hs300_phase(2:end,2) - hs300_phase(1:end-1,2);
+bull_bear = hs300_phase(2:end,3);
 seq = [];
 for i = 1:length(bull_bear)
     seq = [seq ; linspace(bull_bear(i),bull_bear(i),hs300_phase(i+1,1)-hs300_phase(i,1))'];
@@ -197,7 +197,7 @@ end
 xlswrite(outputFile,{'hs300_phase'},3,'C1');
 xlswrite(outputFile,seq,3,'C2');
 
-bull_bear = zz500_phase(2:end,2) - zz500_phase(1:end-1,2);
+bull_bear = zz500_phase(2:end,3);
 seq = [];
 for i = 1:length(bull_bear)
     seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz500_phase(i+1,1)-zz500_phase(i,1))'];
@@ -208,7 +208,7 @@ end
 xlswrite(outputFile,{'zz500_phase'},3,'D1');
 xlswrite(outputFile,seq,3,'D2');
 
-bull_bear = zz800_phase(2:end,2) - zz800_phase(1:end-1,2);
+bull_bear = zz800_phase(2:end,3);
 seq = [];
 for i = 1:length(bull_bear)
     seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz800_phase(i+1,1)-zz800_phase(i,1))'];
@@ -219,7 +219,7 @@ end
 xlswrite(outputFile,{'zz800_phase'},3,'E1');
 xlswrite(outputFile,seq,3,'E2');
 
-bull_bear = zz1000_phase(2:end,2) - zz1000_phase(1:end-1,2);
+bull_bear = zz1000_phase(2:end,3);
 seq = [];
 for i = 1:length(bull_bear)
     seq = [seq ; linspace(bull_bear(i),bull_bear(i),zz1000_phase(i+1,1)-zz1000_phase(i,1))'];
@@ -230,7 +230,7 @@ end
 xlswrite(outputFile,{'zz1000_phase'},3,'F1');
 xlswrite(outputFile,seq,3,'F2');
 
-bull_bear = zzlt_phase(2:end,2) - zzlt_phase(1:end-1,2);
+bull_bear = zzlt_phase(2:end,3);
 seq = [];
 for i = 1:length(bull_bear)
     seq = [seq ; linspace(bull_bear(i),bull_bear(i),zzlt_phase(i+1,1)-zzlt_phase(i,1))'];

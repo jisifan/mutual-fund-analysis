@@ -77,11 +77,21 @@ minlocation = minlocation(minlocation~=0);
 %peaks or troughs less than 15 months from each other
 location = sort([maxlocation,minlocation]);
 [Lia1,Locb1] = ismember(location,maxlocation);
-phase = zeros(length(location),2);
+phase = zeros(length(location),3);
 
 %ensure all output are column vector
 phase(:,1) = location';
 phase(:,2) = Lia1';
+for i = 1:(length(location)-1)
+    if (z(location(i+1)) - z(location(i)))/z(location(i)) > chg
+        phase(i,3) = 1;
+    elseif (z(location(i+1)) - z(location(i)))/z(location(i)) < -chg
+        phase(i,3) = -1;
+    else
+        phase(i,3) = 0;
+    end
+end
+phase(length(location),3) = 100000;
 maxlocation = maxlocation';
 minlocation = minlocation';
 check = check';

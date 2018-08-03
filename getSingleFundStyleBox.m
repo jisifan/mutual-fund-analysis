@@ -112,9 +112,9 @@ for i = 1:(size(period,1)-1)
     if signal || i == size(period,1)-1
         dateLocation = [dateLocation;endlocation];
     end
-    peakOrTrough =[peakOrTrough;period(i,2)];
+    peakOrTrough =[peakOrTrough;period(i,3)];
     if signal || i == size(period,1)-1
-        peakOrTrough =[peakOrTrough;period(i+1,2)];
+        peakOrTrough =[peakOrTrough;period(i+1,3)];
     end
     periodPeerRank = [periodPeerRank;w_wss_data];
 end
@@ -148,8 +148,8 @@ end
 xlswrite(fileName,{'fundmanagers'},1,'I1');
 xlswrite(fileName,fumdmanagerList,1,'I2');
 
-T1 = peakOrTrough(2:end)-peakOrTrough(1:end-1);%牛熊市
-T2 = dateLocation(2:end)-dateLocation(1:end-1);%天数
+T1 = peakOrTrough(1:end-1);%牛熊市
+T2 = datenum(dateSeries(dateLocation(2:end)))- datenum(dateSeries(dateLocation(1:end-1)));%天数
 
 if iscell(periodPeerRank)
     periodPeerRank = cell2mat(periodPeerRank);
