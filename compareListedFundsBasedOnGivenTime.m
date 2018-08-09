@@ -2,7 +2,8 @@ format long g;
 % read data
 startTime = '2006-01-04';
 endTime = '2018-08-01';
-indexcode = '000902.CSI';%zzlt index
+% indexcode = '000902.CSI';%zzlt index
+indexcode = '000906.SH';
 fundcode = '000001.OF';
 fundStartDate = '2014-01-01';
 %fundDuration = 360;%how many trade day did we use since fund setup

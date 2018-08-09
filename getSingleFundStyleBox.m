@@ -1,23 +1,24 @@
 format long g;
 % read data
-startTime = '2006-01-04';
-endTime = '2018-07-11';
-indexcode = '000902.CSI';
-fundcode = '910021.OF';
-fundStartDate = '1917-9-27';
+startTime = '2005-01-04';
+endTime = '2018-08-08';
+% indexcode = '000902.CSI';
+indexcode = '000906.SH';%zz800
+fundcode = '161005.OF';
+fundStartDate = '2013-06-05';
 %fundDuration = 360;%how many trade day did we use since fund setup
-fundEndDate = endTime;%get fund data until this time(not use)
+fundEndDate = '2018-8-8';%get fund data until this time(not use)
 dateFormat = 'yyyy-mm-dd';
 fileName = 'C:\Users\tangheng\Dropbox\summerIntern\ДњТы\mutual-fund-analysis\singleFundStyle.xlsx';
 
 w = windmatlab;
-% [w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
-% [w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
-% index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
-% timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
-% tradedays = w_tdays_data(timess == ones(length(timess),1));
-% WindTimeList = w_tdays_times(timess == ones(length(timess),1));
-% save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
+[w_wsd_data,w_wsd_codes,w_wsd_fields,w_wsd_times,w_wsd_errorid,w_wsd_reqid]=w.wsd(indexcode,'close,adjfactor',startTime,endTime,'Currency=CNY','PriceAdj=B');
+[w_tdays_data,w_tdays_codes,w_tdays_fields,w_tdays_times,w_tdays_errorid,w_tdays_reqid]=w.tdays(startTime,endTime);
+index_fuquan = w_wsd_data(:,1) .* w_wsd_data(:,2);
+timess = ismember(w_tdays_times,w_wsd_times);%test pricedata's corresponding date
+tradedays = w_tdays_data(timess == ones(length(timess),1));
+WindTimeList = w_tdays_times(timess == ones(length(timess),1));
+save('datatemp.mat','index_fuquan','tradedays','WindTimeList');
 load('datatemp.mat');
 
 series = index_fuquan;
@@ -130,9 +131,9 @@ xlswrite(fileName,fundSetup,1,'C2');
 xlswrite(fileName,{'time'},1,'D1');
 xlswrite(fileName,dateSeries(dateLocation),1,'D2');
 xlswrite(fileName,{'bull_bear'},1,'E1');
-xlswrite(fileName,peakOrTrough(2:end)-peakOrTrough(1:end-1),1,'E2');
+xlswrite(fileName,peakOrTrough(1:end-1),1,'E2');
 xlswrite(fileName,{'duration'},1,'F1');
-xlswrite(fileName,dateLocation(2:end)-dateLocation(1:end-1),1,'F2');
+xlswrite(fileName,datenum(dateSeries(dateLocation(2:end)))- datenum(dateSeries(dateLocation(1:end-1))),1,'F2');
 xlswrite(fileName,{'rank'},1,'G1');
 xlswrite(fileName,periodPeerRank,1,'G2');
 
