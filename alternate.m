@@ -105,7 +105,7 @@ for i = 2:length(location)-1
     % if the change percent between peak_troughs_peak is too small then
     % elimate the middle one
     if Lia1(j) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1
-        if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(minlocation(Locb1(j))) < chg ...
+        if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) < chg ...
                 && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(minlocation(Locb2(i))))/orig_ser(minlocation(Locb2(i))) < chg ...
                 && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) < chg
             minlocation(Locb2(i)) = NaN;
@@ -146,7 +146,7 @@ for i = 2:length(location)-1
     
     %trough_peaks_peaks(last trough is biggest)
     if Lia2(j) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(i+1)))
-        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i+1))))/orig_ser(minlocation(Locb1(i))) > chg
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i+1))))/orig_ser(maxlocation(Locb1(i))) > chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
@@ -154,7 +154,7 @@ for i = 2:length(location)-1
     
     %peaks_peaks_trough(first trough is biggest)
     if Lia1(j) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(j)))
-        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(minlocation(Locb1(j))) > chg
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) > chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
@@ -167,13 +167,13 @@ location = sort([maxlocation,minlocation]);
 [Lia1,Locb1] = ismember(location,maxlocation);
 [Lia2,Locb2] = ismember(location,minlocation);
 
-for i = 1:length(location)-1
+for i = 2:length(location)-1
     % if there are three consecutive peaks, then elimate middle one
-    if i>=2 && Lia1(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1
+    if Lia1(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1
         maxlocation(Locb1(i)) = NaN;
     end
     % if there are three consecutive troughs, then elimate middle one
-    if i>=2 && Lia2(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1
+    if Lia2(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1
         minlocation(Locb2(i)) = NaN;
     end
 end
@@ -183,7 +183,7 @@ maxlocation = maxlocation(isfinite(maxlocation));
 minlocation = minlocation(isfinite(minlocation));
 location = sort([maxlocation,minlocation]);
 
-for i = 1:(length(location)-1)
+for i = 2:(length(location)-1)
     if abs(orig_ser(location(i+1)) - orig_ser(location(i)))/orig_ser(location(i)) < chg ...
         && abs(orig_ser(location(i)) - orig_ser(location(i-1)))/orig_ser(location(i-1)) < chg ...
         && abs(orig_ser(location(i+1)) - orig_ser(location(i-1)))/orig_ser(location(i-1)) < chg
