@@ -105,56 +105,51 @@ for i = 2:length(location)-1
     % if the change percent between peak_troughs_peak is too small then
     % elimate the middle one
     if Lia1(j) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1
-        if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(minlocation(Locb1(j))) < chg ...
+        if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) < chg ...
                 && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(minlocation(Locb2(i))))/orig_ser(minlocation(Locb2(i))) < chg ...
                 && abs(orig_ser(maxlocation(Locb1(i+1))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) < chg
             minlocation(Locb2(i)) = NaN;
             Lia2(i) = 0;
         end
-    end
     
     % if the change percent between troughs_peak_troughs is too small then
     % elimate the middle one
-    if Lia2(j) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1
+    elseif Lia2(j) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1
         if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(minlocation(Locb2(j))))/orig_ser(minlocation(Locb2(j))) < chg ...
                 && abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(maxlocation(Locb1(i))))/orig_ser(maxlocation(Locb1(i))) < chg ...
                 && abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(minlocation(Locb2(j))))/orig_ser(minlocation(Locb2(j))) < chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
-    end
     
     %troughs_troughs_peak(first trough is smallest)
     %if second trough is much bigger then first trough then elimate
     %second trough
-    if Lia2(j) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1 && orig_ser(minlocation(Locb2(j)))<orig_ser(minlocation(Locb2(i)))
+    elseif Lia2(j) == 1 && Lia2(i) == 1 && Lia1(i+1) == 1 && orig_ser(minlocation(Locb2(j)))<orig_ser(minlocation(Locb2(i)))
         if abs(orig_ser(minlocation(Locb2(i))) - orig_ser(minlocation(Locb2(j))))/orig_ser(minlocation(Locb2(j))) > chg
             minlocation(Locb2(i)) = NaN;
             Lia2(i)=0;
         end
-    end
     
     %peak_troughs_troughs(last trough is smallest)
     %if second trough is much smaller then first trough then elimate
     %first trough
-    if Lia1(j) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1 && orig_ser(minlocation(Locb2(i+1))) < orig_ser(minlocation(Locb2(i)))
+    elseif Lia1(j) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1 && orig_ser(minlocation(Locb2(i+1))) < orig_ser(minlocation(Locb2(i)))
         if abs(orig_ser(minlocation(Locb2(i+1))) - orig_ser(minlocation(Locb2(i))))/orig_ser(minlocation(Locb2(i))) > chg
             minlocation(Locb2(i)) = NaN;
             Lia2(i)=0;
         end
-    end
     
     %trough_peaks_peaks(last trough is biggest)
-    if Lia2(j) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(i+1)))
-        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i+1))))/orig_ser(minlocation(Locb1(i))) > chg
+    elseif Lia2(j) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(i+1)))
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(i+1))))/orig_ser(maxlocation(Locb1(i))) > chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
-    end
     
     %peaks_peaks_trough(first trough is biggest)
-    if Lia1(j) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(j)))
-        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(minlocation(Locb1(j))) > chg
+    elseif Lia1(j) == 1 && Lia1(i) == 1 && Lia2(i+1) == 1 && orig_ser(maxlocation(Locb1(i))) < orig_ser(maxlocation(Locb1(j)))
+        if abs(orig_ser(maxlocation(Locb1(i))) - orig_ser(maxlocation(Locb1(j))))/orig_ser(maxlocation(Locb1(j))) > chg
             maxlocation(Locb1(i)) = NaN;
             Lia1(i)=0;
         end
@@ -167,13 +162,13 @@ location = sort([maxlocation,minlocation]);
 [Lia1,Locb1] = ismember(location,maxlocation);
 [Lia2,Locb2] = ismember(location,minlocation);
 
-for i = 1:length(location)-1
+for i = 2:length(location)-1
     % if there are three consecutive peaks, then elimate middle one
-    if i>=2 && Lia1(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1
+    if Lia1(i-1) == 1 && Lia1(i) == 1 && Lia1(i+1) == 1
         maxlocation(Locb1(i)) = NaN;
-    end
+
     % if there are three consecutive troughs, then elimate middle one
-    if i>=2 && Lia2(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1
+    elseif Lia2(i-1) == 1 && Lia2(i) == 1 && Lia2(i+1) == 1
         minlocation(Locb2(i)) = NaN;
     end
 end
@@ -183,7 +178,7 @@ maxlocation = maxlocation(isfinite(maxlocation));
 minlocation = minlocation(isfinite(minlocation));
 location = sort([maxlocation,minlocation]);
 
-for i = 1:(length(location)-1)
+for i = 2:(length(location)-1)
     if abs(orig_ser(location(i+1)) - orig_ser(location(i)))/orig_ser(location(i)) < chg ...
         && abs(orig_ser(location(i)) - orig_ser(location(i-1)))/orig_ser(location(i-1)) < chg ...
         && abs(orig_ser(location(i+1)) - orig_ser(location(i-1)))/orig_ser(location(i-1)) < chg
@@ -191,6 +186,109 @@ for i = 1:(length(location)-1)
             maxlocation(Locb1(i)) = NaN;               
         else
             minlocation(Locb2(i)) = NaN;               
+        end
+    end
+end
+
+maxlocation = maxlocation(isfinite(maxlocation));
+minlocation = minlocation(isfinite(minlocation));
+location = sort([maxlocation,minlocation]);
+[Lia1,Locb1] = ismember(location,maxlocation);
+[Lia2,Locb2] = ismember(location,minlocation);
+
+i = 2;
+% check four peak and through once
+while i <= length(location)-2
+    j = i - 1;
+    while j>1
+        if Lia1(i) + Lia1(j) + Lia2(i) + Lia2(j) >1
+            break;
+        end
+        j = j - 1;
+    end
+%     fprintf('%d:%d:%d:%d\n',orig_ser(location(i+2)) - orig_ser(location(i+1))/orig_ser(location(i+1)),orig_ser(location(i)) - orig_ser(location(j))/orig_ser(location(j)),orig_ser(location(i+1))-orig_ser(location(i)),chg)
+    if (orig_ser(location(i+2)) - orig_ser(location(i+1)))/orig_ser(location(i+1)) > chg ...
+        && (orig_ser(location(i)) - orig_ser(location(j)))/orig_ser(location(j)) > chg ...
+        && orig_ser(location(i+1)) > orig_ser(location(i))
+        if Lia1(i)>0
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i)=0;
+        else
+            minlocation(Locb2(i)) = NaN; 
+            Lia2(i)=0;
+        end
+        if Lia1(i+1)>0
+            maxlocation(Locb1(i+1)) = NaN;
+            Lia1(i+1)=0;
+        else
+            minlocation(Locb2(i+1)) = NaN;
+            Lia2(i+1)=0;
+        end
+        if i+2<length(location)-2
+            i = i+1;
+        else
+            break;
+        end
+    elseif (orig_ser(location(i+1)) - orig_ser(location(i+2)))/orig_ser(location(i+1)) > chg ...
+        && (orig_ser(location(j)) - orig_ser(location(i)))/orig_ser(location(j)) > chg ...
+        && orig_ser(location(i+1)) < orig_ser(location(i))
+        if Lia1(i)>0
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i) = 0;
+        else
+            minlocation(Locb2(i)) = NaN; 
+            Lia2(i) = 0;
+        end
+        if Lia1(i+1)>0
+            maxlocation(Locb1(i+1)) = NaN;
+            Lia1(i+1) = 0;
+        else
+            minlocation(Locb2(i+1)) = NaN;
+            Lia2(i+1) = 0;
+        end
+        if i+2<length(location)-2
+            i = i + 1;
+        else
+            break;
+        end
+    end
+    i = i + 1;
+end
+
+
+maxlocation = maxlocation(isfinite(maxlocation));
+minlocation = minlocation(isfinite(minlocation));
+location = sort([maxlocation,minlocation]);
+[Lia1,Locb1] = ismember(location,maxlocation);
+[Lia2,Locb2] = ismember(location,minlocation);
+
+for i = 2:length(location)-1
+    j = i - 1;
+    while j>1
+        if Lia1(i) + Lia1(j) + Lia2(i) + Lia2(j) >1
+            break;
+        end
+        j = j - 1;
+    end
+%     fprintf('%d:%d:%d:%d\n',orig_ser(location(i+2)) - orig_ser(location(i+1))/orig_ser(location(i+1)),orig_ser(location(i)) - orig_ser(location(j))/orig_ser(location(j)),orig_ser(location(i+1))-orig_ser(location(i)),chg)
+    if (orig_ser(location(i)) - orig_ser(location(j)))/orig_ser(location(j)) > chg ...
+        && (orig_ser(location(i+1)) - orig_ser(location(i)))/orig_ser(location(i))>chg
+        if Lia1(i)>0
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i)=0;
+        else
+            minlocation(Locb2(i)) = NaN; 
+            Lia2(i)=0;
+        end
+      
+    elseif (orig_ser(location(j)) - orig_ser(location(i)))/orig_ser(location(j)) > chg ...
+        && (orig_ser(location(i)) - orig_ser(location(i+1)))/orig_ser(location(i))>chg
+        if Lia1(i)>0
+            maxlocation(Locb1(i)) = NaN;
+            Lia1(i) = 0;
+        else
+            minlocation(Locb2(i)) = NaN; 
+            Lia2(i) = 0;
         end
     end
 end
